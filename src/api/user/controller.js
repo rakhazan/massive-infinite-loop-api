@@ -149,7 +149,7 @@ export const login = async (req, res) => {
             username: user.username,
             role: user.role
         }, process.env.ACCESS_TOKEN_KEY, {
-            expiresIn: '60s',
+            expiresIn: '15s',
         })
 
         const refresh_token = jwt.sign({
@@ -184,7 +184,6 @@ export const login = async (req, res) => {
 export const refreshToken = async (req, res) => {
     try {
         const refresh_token = req.cookies.refreshToken
-        console.log(refresh_token)
         if (!refresh_token) {
             return res.status(401).json({
                 status: 'fail',
@@ -214,7 +213,7 @@ export const refreshToken = async (req, res) => {
                 username: user.username,
                 role: user.role
             }, process.env.ACCESS_TOKEN_KEY, {
-                expiresIn: '60s'
+                expiresIn: '15s'
             })
 
             return res.json({

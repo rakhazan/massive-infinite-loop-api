@@ -91,9 +91,9 @@ export const store = async (req, res) => {
 
 export const update = async (req, res) => {
     const { treatmentId } = req.params
-    const { fullname, phone } = req.body
+    const { tipe_sepatu, jenis_layanan, harga, status } = req.body
     try {
-        const updated = await _update(treatmentId, { fullname, phone, updated_at: new Date() })
+        const updated = await _update(treatmentId, { tipe_sepatu, jenis_layanan, harga, status, updated_at: new Date() })
 
         if (!updated) {
             return res.status(404).json({

@@ -9,15 +9,14 @@ const verifyToken = (req, res, next) => {
             message: 'Anda belum login'
         })
     }
-
     jwt.verify(token, process.env.ACCESS_TOKEN_KEY, (err, decoded) => {
         if (err) {
+            console.log(err)
             return res.status(403).json({
                 status: 'fail',
                 message: 'Anda tidak memiliki akses'
             })
         }
-        req.username = decoded.username
         next()
     })
 }

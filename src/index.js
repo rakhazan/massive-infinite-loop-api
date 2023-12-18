@@ -8,7 +8,7 @@ import routes from './api/index.js'
 const app = express()
 dotenv.config()
 
-app.use(cors({ credentials: true, origin: 'http://localhost:5173' }))
+app.use(cors({ credentials: true, origin: process.env.FE_URL }))
 app.use(cookieParser())
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
