@@ -1,4 +1,5 @@
-import { getAll, getDetail, insert, update as _update, hardDelete, softDelete } from "./model.js"
+import { nanoid } from "nanoid"
+import { getAll, getDetail, insert, update as _update, hardDelete } from "./model.js"
 
 export const get = async (req, res) => {
     try {
@@ -7,7 +8,7 @@ export const get = async (req, res) => {
         return res.json({
             status: 'success',
             data: {
-                pelanggan: data
+                perawatan: data
             }
         })
     } catch (error) {
@@ -19,21 +20,47 @@ export const get = async (req, res) => {
 }
 
 export const find = async (req, res) => {
-    const { pelangganId } = req.params
+    const { treatmentId } = req.params
     try {
-        const [data] = await getDetail(pelangganId)
+        const [data] = await getDetail(treatmentId)
 
         if (!data) {
             return res.status(404).json({
                 status: 'fail',
-                message: 'Data pelanggan tidak ditemukan'
+                message: 'Data perawatan tidak ditemukan'
             })
         }
 
         return res.json({
             status: 'success',
             data: {
-                pelanggan: data
+                perawatan: data
+            }
+        })
+    } catch (error) {
+        return res.status(500).json({
+            status: 'fail',
+            message: error
+        })
+    }
+}
+
+export const findByKode = async (req, res) => {
+    const { kode } = req.params
+    try {
+        const [data] = await getDetail(kode)
+
+        if (!data) {
+            return res.status(404).json({
+                status: 'fail',
+                message: 'Data perawatan tidak ditemukan'
+            })
+        }
+
+        return res.json({
+            status: 'success',
+            data: {
+                perawatan: data
             }
         })
     } catch (error) {
@@ -45,13 +72,14 @@ export const find = async (req, res) => {
 }
 
 export const store = async (req, res) => {
-    const { fullname, phone } = req.body
+    const { pelanggan_id, tipe_sepatu, jenis_layanan, harga } = req.body
+    const kode = nanoid(8)
     try {
-        await insert([fullname, phone])
+        await insert([kode, pelanggan_id, tipe_sepatu, jenis_layanan, harga])
 
         return res.status(201).json({
             status: 'success',
-            message: 'Berhasil menambahkan data pelanggan baru',
+            message: 'Berhasil menambahkan data perawatan baru',
         })
     } catch (error) {
         return res.status(500).json({
@@ -62,21 +90,21 @@ export const store = async (req, res) => {
 }
 
 export const update = async (req, res) => {
-    const { pelangganId } = req.params
-    const { fullname, phone } = req.body
+    const { treatmentId } = req.params
+    const { tipe_sepatu, jenis_layanan, harga, status } = req.body
     try {
-        const updated = await _update(pelangganId, { fullname, phone, updated_at: new Date() })
+        const updated = await _update(treatmentId, { tipe_sepatu, jenis_layanan, harga, status, updated_at: new Date() })
 
         if (!updated) {
             return res.status(404).json({
                 status: 'fail',
-                message: 'Data pelanggan tidak ditemukan'
+                message: 'Data perawatan tidak ditemukan'
             })
         }
 
         return res.json({
             status: 'success',
-            message: 'Berhasil menyimpan perubahan data pelanggan'
+            message: 'Berhasil menyimpan perubahan data perawatan'
         })
     } catch (error) {
         return res.status(500).json({
@@ -87,24 +115,19 @@ export const update = async (req, res) => {
 }
 
 export const destroy = async (req, res) => {
-    const { pelangganId } = req.params
-    const { type } = req.query
-
-    let del = false
-
+    const { treatmentId } = req.params
     try {
-        if (type !== undefined && type === 'hard') { del = await hardDelete(pelangganId) }
-        else { del = await softDelete(pelangganId) }
+        const del = await hardDelete(treatmentId)
         if (!del) {
             return res.status(404).json({
                 status: 'fail',
-                message: 'Data pelanggan tidak ditemukan'
+                message: 'Data perawatan tidak ditemukan'
             })
         }
 
         return res.json({
             status: 'success',
-            message: 'Berhasil menghapus data pelanggan'
+            message: 'Berhasil menghapus data perawatan'
         })
     } catch (error) {
         return res.status(500).json({
