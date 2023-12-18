@@ -65,8 +65,7 @@ export const update = async (req, res) => {
     const { pelangganId } = req.params
     const { fullname, phone } = req.body
     try {
-        const date = new Date().toISOString()
-        const updated = await _update(pelangganId, { fullname, phone, updated_at: date })
+        const updated = await _update(pelangganId, { fullname, phone, updated_at: new Date() })
 
         if (!updated) {
             return res.status(404).json({

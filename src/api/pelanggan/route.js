@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { destroy, find, get, store, update } from './controller.js'
+import verifyToken from '../../middleware/verifyToken.js'
 
 const router = Router()
 

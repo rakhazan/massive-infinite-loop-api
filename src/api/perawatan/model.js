@@ -6,7 +6,7 @@ export const getAll = () => {
 }
 
 export const getDetail = async (id) => {
-    const sql = `SELECT * FROM treatments WHERE id=? OR kode=? LIMIT 1`
+    const sql = `SELECT t.*, c.fullname, c.phone FROM treatments t LEFT JOIN customers c ON t.pelanggan_id=c.id WHERE t.id=? OR t.kode=? LIMIT 1`
     const [result] = await db.execute(sql, [id, id])
     return result || null
 }

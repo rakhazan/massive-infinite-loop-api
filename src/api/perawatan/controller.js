@@ -1,3 +1,4 @@
+import { nanoid } from "nanoid"
 import { getAll, getDetail, insert, update as _update, hardDelete } from "./model.js"
 
 export const get = async (req, res) => {
@@ -71,7 +72,8 @@ export const findByKode = async (req, res) => {
 }
 
 export const store = async (req, res) => {
-    const { kode, pelanggan_id, tipe_sepatu, jenis_layanan, harga } = req.body
+    const { pelanggan_id, tipe_sepatu, jenis_layanan, harga } = req.body
+    const kode = nanoid(8)
     try {
         await insert([kode, pelanggan_id, tipe_sepatu, jenis_layanan, harga])
 
@@ -91,8 +93,7 @@ export const update = async (req, res) => {
     const { treatmentId } = req.params
     const { fullname, phone } = req.body
     try {
-        const date = new Date().toISOString()
-        const updated = await _update(treatmentId, { fullname, phone, updated_at: date })
+        const updated = await _update(treatmentId, { fullname, phone, updated_at: new Date() })
 
         if (!updated) {
             return res.status(404).json({
